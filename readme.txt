@@ -7,7 +7,7 @@ Manual Installation
 
 1. Copy the file 'secure.php' to the '\app\payments\' directory for your Cscart website.
 
-2. Copy the file 'secure.tpl' to the '\design\backends\templates\views\payments\components\cc_processors' directory for your Cscart website.
+2. Copy the file 'secure.tpl' to the '\design\backend\templates\views\payments\components\cc_processors' directory for your Cscart website.
 
 3. Add a row for 'securehosting' option in 'cscart_payment_processors' table in cscart database .
 For example:->
@@ -31,13 +31,13 @@ and Add New Payment method by selecting 'SecureHosting' option from Processor dr
 		details section of your SecureHosting account.
 
     - **File Name** - This is the file name of the payment page template you need to upload to your SecureHosting
-		account. The file name of the example template provided with this integration module is "cubecart_template.html". 
+		account. The file name of the example template provided with this integration module is "cscart_template.html". 
 		You can rename this file if you desire, you only need to ensure the name of the file you upload to
 		your SecureHosting account is correctly set here.
 		
 	- **Currency** - UK Pound.
 
-4. Upload the HTML files from the directory to your SecureHosting account through the file manager. 
+4. Upload the HTML files from the "forms" directory to your SecureHosting account through the file manager. 
 We recommend uploading the default files first, testing, then amending these files as required. 
 File uploads are managed within your SecureHosting account via the menu option Settings > File Manager:
     - cscart_template.html
@@ -45,7 +45,7 @@ File uploads are managed within your SecureHosting account via the menu option S
     - htmlbad.html
 	
 5.	Test Mode - The SecureHosting system can run in test mode and processes your transactions as test transaction. Change this
-		setting to True to use the test mode. Don't forget to change this back to False before going live!
+		setting to Test to use the test mode. Don't forget to change this back to Live before going live!
 
     
 6.	You are now ready to go.

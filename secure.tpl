@@ -1,12 +1,12 @@
 <div class="control-group">
-    <label class="control-label" for="ab_shreference">{__("Shreferencee")}:</label>
+    <label class="control-label" for="ab_shreference">SH Account</label>
     <div class="controls">
         <input type="text" name="payment_data[processor_params][shreference]" id="ab_shreference" value="{$processor_params.shreference}"   size="60">
     </div>
 </div>
 
 <div class="control-group">
-    <label class="control-label" for="ab_checkcode">{__("Checkcode")}:</label>
+    <label class="control-label" for="ab_checkcode">Check code</label>
     <div class="controls">
         <input type="text" name="payment_data[processor_params][checkcode]" id="ab_checkcode" value="{$processor_params.checkcode}"   size="60">
     </div>
