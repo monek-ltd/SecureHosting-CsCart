@@ -9,19 +9,21 @@ Manual Installation
 
 2. Copy the file 'secure.tpl' to the '\design\backend\templates\views\payments\components\cc_processors' directory for your Cscart website.
 
-3. Add a row for 'securehosting' option in 'cscart_payment_processors' table in cscart database .
-For example:->
-Column name => value
-processor=>SecureHosting
-processor_script=>secure.php
-processor_template=>views/orders/components/payments/cc_outside.tpl
-admin_template=>secure.tpl
-callback=>N
-type=>P
+3. Insert new row into the 'cscart_payment_processors' table in the cscart database containing the following values:
+
+|Column name  |value  |
+|--|--|
+|processor|SecureHosting|
+|processor_script|secure.php|
+|processor_template|views/orders/components/payments/cc_outside.tpl|
+|admin_template|secure.tpl|
+|callback|N|
+|type|P|
 
 2. Within the Cscart Admin Dashboard, open the Payment methods  Under Administartion tab 
-and Add New Payment method by selecting 'SecureHosting' option from Processor dropdown and set the configuration.
-       
+and Add New Payment method by selecting 'SecureHosting' option from Processor dropdown.
+
+On the Configure tab you are required to add the following information:       
 
     - **Reference** - This is the reference for your SecureHosting account. This is also known as the client login,
 	you will find the value for this within the company details section of your SecureHosting account.
@@ -30,12 +32,15 @@ and Add New Payment method by selecting 'SecureHosting' option from Processor dr
 		unique identifier for your account. The value of your check code can be found within the company
 		details section of your SecureHosting account.
 
-    - **File Name** - This is the file name of the payment page template you need to upload to your SecureHosting
-		account. The file name of the example template provided with this integration module is "cscart_template.html". 
+    - **File Name** - This is the file name of the payment page used with the payment flow. The file name of the example template  
+                provided with this integration module is "cscart_template.html" and can be customised to suit your style, this 
+		then needs to be uploaded to your SecureHosting account. 
 		You can rename this file if you desire, you only need to ensure the name of the file you upload to
 		your SecureHosting account is correctly set here.
 		
-	- **Currency** - UK Pound.
+    - **Currency** - UK Pound.
+     
+    - **Live/Test Mode** - see 5. for details on mode
 
 4. Upload the HTML files from the "forms" directory to your SecureHosting account through the file manager. 
 We recommend uploading the default files first, testing, then amending these files as required. 
