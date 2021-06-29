@@ -44,11 +44,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
                 $post_data[] = $_REQUEST[$post_data_value];
             }
         }
-		 foreach ($post_data_values as $post_data_value) {
-            if (isset($_REQUEST[$post_data_value])) {
-                $post_data[] = $_REQUEST[$post_data_value];
-            }
-        }
+		 
 
 		$digest = base64_encode(sha1(implode('', $post_data) . $processor_data['processor_params']['shared_secret'], true));
 
