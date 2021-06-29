@@ -21,9 +21,9 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	$pp_response = array();
 	$pp_response['order_status'] = 'F';
 	$pp_response['reason_text'] = __('text_transaction_declined');
-    $order_id = !empty($_REQUEST['amp;order_id']) ? (int)$_REQUEST['amp;order_id'] : 0;
+    $order_id = !empty($_REQUEST['order_id']) ? (int)$_REQUEST['order_id'] : 0;
 
-    if ($mode == 'success' && !empty($_REQUEST['amp;order_id'])) {
+    if ($mode == 'success' && !empty($_REQUEST['order_id'])) {
 		$order_info = fn_get_order_info($order_id);
 	
 		if (empty($processor_data)) {
@@ -45,14 +45,14 @@ if (defined('PAYMENT_NOTIFICATION')) {
             }
         }
 		 foreach ($post_data_values as $post_data_value) {
-            if (isset($_REQUEST['amp;'.$post_data_value])) {
-                $post_data[] = $_REQUEST['amp;'.$post_data_value];
+            if (isset($_REQUEST[$post_data_value])) {
+                $post_data[] = $_REQUEST[$post_data_value];
             }
         }
 
 		$digest = base64_encode(sha1(implode('', $post_data) . $processor_data['processor_params']['shared_secret'], true));
 
-		if($_REQUEST['amp;status'] == 'success') {
+		if($_REQUEST['status'] == 'success') {
 			$pp_response['order_status'] = 'P';
 			$pp_response['reason_text'] = __('transaction_approved');
 			$pp_response['transaction_id'] = $_REQUEST['transactionreference'];
@@ -68,39 +68,16 @@ if (defined('PAYMENT_NOTIFICATION')) {
 	
 } else {
 	
-	
-	$gbp=0.72;
-	
     if ($processor_data['processor_params']['mode'] == 'test') {
         $payment_url = 'https://test.secure-server-hosting.com/secutran/secuitems.php';
     } else {
         $payment_url = 'https://www.secure-server-hosting.com/secutran/secuitems.php';
     }
 
-    
+    $amount = fn_format_price($order_info['total'], $processor_data['processor_params']['currency']);
     $confirm_url = fn_url("payment_notification.success?payment=secure&status=success&order_id=$order_id", AREA, 'current');
     $cancel_url = fn_url("payment_notification.fail?payment=secure&status=fail&order_id=$order_id", AREA, 'current');
-	$callbackurl = fn_url('', 'C', 'http');
-	$callbackData = "cs-api|Secuerhosting|action|callback|order_id|$order_id";
-	$products = $order_info['products'];
-        $secuitems = '';
-        foreach ($products as $product) {
-            
-            $secuitems .= '[' . $product['product_id'] . '||' . htmlentities($product['product_code'], ENT_QUOTES) . '|' . number_format(($product['price']*$gbp), 2) . '|' . $product['amount'] . '|' . number_format($product['display_subtotal']*$gbp, 2) . ']';
-        }
-       // print_r($secuitems);die;
-	 $transactiontax = 0.0;
-        if (!empty($order_info['taxes'][6]['tax_subtotal'])) {
-            
-                $transactiontax =$order_info['taxes'][6]['tax_subtotal']*$gbp;
-            
-        }
-		
-		$shippingcharge = 0.0;
-         if (!empty($order_info['shipping_cost'])) {
-            $shippingcharge = $order_info['shipping_cost']*$gbp;
-        }
-      $amount = fn_format_price(($order_info['total']*$gbp), $processor_data['processor_params']['currency']);
+
     /** @var \Tygh\Location\Manager $location_manager */
     $location_manager = Tygh::$app['location'];
 
@@ -112,13 +89,7 @@ if (defined('PAYMENT_NOTIFICATION')) {
         'orderAmount' => $amount,
         'currency'    => $processor_data['processor_params']['currency'],
         'payerEmail'  => $order_info['email'],
-        'payerPhone'  => $order_info['phone'],
-		'secuitems'  => $secuitems,
-		'transactiontax'  => $transactiontax,
-		'shippingcharge'  => $shippingcharge,
-		'callbackurl'  => $callbackurl,
-		'callbackdata'  => $callbackData,
-		'secuString'  => '',
+        'payerPhone'  => $location_manager->getLocationField($order_info, 'phone', '', BILLING_ADDRESS_PREFIX),
         'trType'      => '1',
         'confirmUrl'  => $confirm_url,
         'cancelUrl'   => $cancel_url,
@@ -136,7 +107,6 @@ if (defined('PAYMENT_NOTIFICATION')) {
         'checkcode'   => $processor_data['processor_params']['checkcode'],
 		'first_name'  => $location_manager->getLocationField($order_info, 'firstname', '', BILLING_ADDRESS_PREFIX),
 		'last_name'  => $location_manager->getLocationField($order_info, 'lastname', '', BILLING_ADDRESS_PREFIX),
-		
     ];
 
 	$post_data['digest'] = base64_encode(sha1(implode('', $post_data) . $processor_data['processor_params']['shared_secret'], true));
